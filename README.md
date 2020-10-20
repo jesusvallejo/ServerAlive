@@ -5,7 +5,7 @@ Detects if a Port is open on a certain IP, and shows if server is active with a 
 | :------------ | :--------------------------------------------------------- |
 | -d            | Debug mode(produces a .log)                                |
 | -e            | Elementary OS mode(Icons work different on Elementary OS)  |
-| -s/--ip       | Set ip of the server                                       |
+| -i/--ip       | Set ip of the server                                       |
 | -p/--port     | Set port of the server                                     |
 | -r/--rate     | Set polling rate to check the server status                |
 | --noicon      | No notification                                            |
