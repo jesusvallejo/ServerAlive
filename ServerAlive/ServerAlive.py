@@ -89,13 +89,13 @@ def isAlive():
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	result = sock.connect_ex((serverIP, serverPort))
 	if result == 0:
-		logging.debug("Server is alive")
+		logging.warning("Server is alive")
 		if(notifiedAlive==False):
 			sendmessage(True,icon)
 			notifiedAlive=True
 			notifiedDead=False
 	else:
-		logging.debug("Server is dead")
+		logging.warning("Server is dead")
 		if(notifiedDead==False):
 			sendmessage(False,icon)
 			notifiedAlive=False
@@ -113,7 +113,7 @@ def main():
 		if(arg == '--port' or arg == '-p'):
 			global serverPort
 			serverPort = int(argv[count+1])
-		if(arg == '--ip' or arg == '-s'):
+		if(arg == '--ip' or arg == '-i'):
 			global serverIP
 			serverIP = argv[count+1]
 		if(arg == '--noicon'):
@@ -124,17 +124,17 @@ def main():
 		if(arg == "-d"):
 			global debug
 			debug = True
-			logging.basicConfig(filename=os.path.join(defaultPath,defaultLogginFile),level=logging.DEBUG)
-			logging.debug('----------------------------')
-			logging.debug(datetime.now())
-			logging.debug('----------------------------')
-			logging.debug(getpass.getuser())
-			logging.debug('----------------------------')
+			logging.basicConfig(filename=os.path.join(defaultPath,defaultLogginFile),level=logging.WARNING)
+			logging.warning('----------------------------')
+			logging.warning(datetime.now())
+			logging.warning('----------------------------')
+			logging.warning(getpass.getuser())
+			logging.warning('----------------------------')
 		count=count+1
 	try:
 		if(debug == True):
-			logging.debug(argv)
-			logging.debug('----------------------------')
+			logging.warning(argv)
+			logging.warning('----------------------------')
 		global icon
 		icon = trayIcon(os.path.join(defaultPath,iconLoa_img))
 		isAlive()
