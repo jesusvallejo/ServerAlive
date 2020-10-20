@@ -20,6 +20,7 @@ rate=30.0              # integer in seconds
 
 # paths
 defaultPath=os.path.dirname(os.path.realpath(__file__)) #  to force the location os.path.expanduser('~/ServerAlive/')
+iconsPath=os.path.join(defaultPath,'icons')
 eOS_iconPath=os.path.expanduser('~/.local/share/icons/')
 
 # filenames
@@ -51,9 +52,9 @@ def eOSNotification(defaultPath,eOS_iconPath,iconCon_img,iconDis_img):
 	global elementaryOS
 	elementaryOS = True
 	if os.path.isfile(os.path.join(eOS_iconPath,iconCon_img)) == False:
-		shutil.copyfile(os.path.join(defaultPath,iconCon_img), os.path.join(eOS_iconPath,iconCon_img))
+		shutil.copyfile(os.path.join(iconsPath,iconCon_img), os.path.join(eOS_iconPath,iconCon_img))
 	if os.path.isfile(os.path.join(eOS_iconPath,iconDis_img)) == False:
-		shutil.copyfile(os.path.join(defaultPath,iconDis_img), os.path.join(eOS_iconPath,iconDis_img))
+		shutil.copyfile(os.path.join(iconsPath,iconDis_img), os.path.join(eOS_iconPath,iconDis_img))
 
 
 def sendmessage(status,icon):
@@ -61,8 +62,8 @@ def sendmessage(status,icon):
 	if(noNotify):
 		return
 	text=''
-	iconCon = os.path.join(defaultPath,iconCon_img)
-	iconDis = os.path.join(defaultPath,iconDis_img)
+	iconCon = os.path.join(iconsPath,iconCon_img)
+	iconDis = os.path.join(iconsPath,iconDis_img)
 
 	if(status == True):
 		image=Image.open(iconCon)
@@ -105,7 +106,6 @@ def isAlive():
 def main():
 	argv = sys.argv
 	count=0
-	targetfile = os.path.join(defaultPath,defaultConfigFile)
 	for arg in argv:
 		if(arg == '-r' or arg == '--rate'):
 			global rate
