@@ -1,5 +1,5 @@
 # ServerAlive
-Detects if port is open, and shows if server is active with a notification and a tray icon.
+Detects if a Port is open on a certain IP, and shows if server is active with a notification and a tray icon.
 
 | Command       | Info                                                       |
 | :------------ | :--------------------------------------------------------- |
@@ -7,4 +7,5 @@ Detects if port is open, and shows if server is active with a notification and a
 | -e            | Elementary OS mode(Icons work different on Elementary OS)  |
 | -s/--ip       | Set ip of the server                                       |
 | -p/--port     | Set port of the server                                     |
+| -r/--rate     | Set polling rate to check the server status                |
 | --noicon      | No notification                                            |
