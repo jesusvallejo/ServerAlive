@@ -120,7 +120,7 @@ def main():
 			global noNotify
 			noNotify = True
 		if(arg == "-e"):
-			eOSNotification(defaultPath,eOS_iconPath,iconCon_img,iconDis_img)
+			eOSNotification(iconsPath,eOS_iconPath,iconCon_img,iconDis_img)
 		if(arg == "-d"):
 			global debug
 			debug = True
@@ -136,7 +136,7 @@ def main():
 			logging.warning(argv)
 			logging.warning('----------------------------')
 		global icon
-		icon = trayIcon(os.path.join(defaultPath,iconLoa_img))
+		icon = trayIcon(os.path.join(iconsPath,iconLoa_img))
 		isAlive()
 		icon.run()
 
