@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw
 # settings
 serverIP='192.168.1.8' # has to be a string
 serverPort=90 		   # has to be integer
+rate=30.0              # integer in seconds
 
 # paths
 defaultPath=os.path.dirname(os.path.realpath(__file__)) #  to force the location os.path.expanduser('~/ServerAlive/')
@@ -83,8 +84,8 @@ def sendmessage(status,icon):
 	return
 
 def isAlive():
-	global icon,notifiedAlive,notifiedDead
-	threading.Timer(30.0, isAlive).start()
+	global icon,notifiedAlive,notifiedDead,rate
+	threading.Timer(rate, isAlive).start()
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	result = sock.connect_ex((serverIP, serverPort))
 	if result == 0:
@@ -106,6 +107,9 @@ def main():
 	count=0
 	targetfile = os.path.join(defaultPath,defaultConfigFile)
 	for arg in argv:
+		if(arg == '-r' or arg == '--rate'):
+			global rate
+			rate = argv[count+1]
 		if(arg == '--port' or arg == '-p'):
 			global serverPort
 			serverPort = int(argv[count+1])
@@ -113,6 +117,7 @@ def main():
 			global serverIP
 			serverIP = argv[count+1]
 		if(arg == '--noicon'):
+			global noNotify
 			noNotify = True
 		if(arg == "-e"):
 			eOSNotification(defaultPath,eOS_iconPath,iconCon_img,iconDis_img)
