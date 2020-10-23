@@ -1,3 +1,4 @@
+
 import sys
 import os
 import math
@@ -30,6 +31,9 @@ defaultLogginFile=filename+'.log'# to force a logging name 'midi2vol.log'
 iconCon_img='ServerAlive.png'
 iconDis_img='ServerDead.png'
 iconLoa_img='ServerLoad.png'
+iconCon_tray='TrayWhiteIconAlive.png'
+iconDis_tray='TrayWhiteIconDead.png'
+iconLoa_tray='TrayWhiteIconLoad.png'
 
 # flags
 tray = False
@@ -39,11 +43,11 @@ noNotify = False
 notifiedAlive=False
 notifiedDead=False
 
+
+
 def trayIcon(icon_img):
 	global icon
-	width=12
-	height=12
-	image=Image.open(icon_img)
+	image=Image.open(os.path.join(iconsPath,icon_img))
 	icon=pystray.Icon(filename, image)
 	return icon
 
@@ -64,9 +68,11 @@ def sendmessage(status,icon):
 	text=''
 	iconCon = os.path.join(iconsPath,iconCon_img)
 	iconDis = os.path.join(iconsPath,iconDis_img)
+	iconConTray = os.path.join(iconsPath,iconCon_tray)
+	iconDisTray = os.path.join(iconsPath,iconDis_tray)
 
 	if(status == True):
-		image=Image.open(iconCon)
+		image=Image.open(iconConTray)
 		icon.icon = image
 		text='Server is Alive'
 		img = iconCon
@@ -74,7 +80,7 @@ def sendmessage(status,icon):
 			img= os.path.splitext(iconCon_img)[0]
 
 	elif(status == False):
-		image=Image.open(iconDis)
+		image=Image.open(iconDisTray)
 		icon.icon = image
 		text='Server is Dead'
 		img = iconDis
@@ -124,7 +130,7 @@ def main():
 		if(arg == "-d"):
 			global debug
 			debug = True
-			logging.basicConfig(filename=os.path.join(defaultPath,defaultLogginFile),level=logging.WARNING)
+			logging.basicConfig(filename=os.path.join(defaultPath,defaultLogginFile),level=logging.DEBUG)
 			logging.warning('----------------------------')
 			logging.warning(datetime.now())
 			logging.warning('----------------------------')
@@ -136,7 +142,7 @@ def main():
 			logging.warning(argv)
 			logging.warning('----------------------------')
 		global icon
-		icon = trayIcon(os.path.join(iconsPath,iconLoa_img))
+		icon = trayIcon(os.path.join(iconsPath,iconLoa_tray))
 		isAlive()
 		icon.run()
 
@@ -147,5 +153,7 @@ def main():
 
 if __name__== "__main__":
   	main()
+
+
 
 
