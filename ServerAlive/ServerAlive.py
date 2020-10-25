@@ -1,4 +1,4 @@
-
+import argparse
 import sys
 import os
 import math
@@ -26,8 +26,7 @@ eOS_iconPath=os.path.expanduser('~/.local/share/icons/')
 
 # filenames
 filename=os.path.splitext(os.path.basename(__file__))[0]
-defaultConfigFile='config.json'
-defaultLogginFile=filename+'.log'# to force a logging name 'midi2vol.log'
+defaultLogginFile=filename+'.log'# to force a logging name 'ServerAlive.log'
 iconCon_img='ServerAlive.png'
 iconDis_img='ServerDead.png'
 iconLoa_img='ServerLoad.png'
@@ -87,7 +86,7 @@ def sendmessage(status,icon):
 		if(elementaryOS):
 			img= os.path.splitext(iconDis_img)[0]
 
-	subprocess.Popen(["notify-send", "-i", img, filename, text])
+	subprocess.Popen(['notify-send', '-i', img, filename, text])
 	return
 
 def isAlive():
@@ -96,13 +95,13 @@ def isAlive():
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	result = sock.connect_ex((serverIP, serverPort))
 	if result == 0:
-		logging.warning("Server is alive")
+		logging.warning('Server is alive')
 		if(notifiedAlive==False):
 			sendmessage(True,icon)
 			notifiedAlive=True
 			notifiedDead=False
 	else:
-		logging.warning("Server is dead")
+		logging.warning('Server is dead')
 		if(notifiedDead==False):
 			sendmessage(False,icon)
 			notifiedAlive=False
@@ -110,37 +109,38 @@ def isAlive():
 	sock.close()
 
 def main():
-	argv = sys.argv
-	count=0
-	for arg in argv:
-		if(arg == '-r' or arg == '--rate'):
-			global rate
-			rate = argv[count+1]
-		if(arg == '--port' or arg == '-p'):
-			global serverPort
-			serverPort = int(argv[count+1])
-		if(arg == '--ip' or arg == '-i'):
-			global serverIP
-			serverIP = argv[count+1]
-		if(arg == '--noicon'):
-			global noNotify
-			noNotify = True
-		if(arg == "-e"):
-			eOSNotification(iconsPath,eOS_iconPath,iconCon_img,iconDis_img)
-		if(arg == "-d"):
-			global debug
-			debug = True
-			logging.basicConfig(filename=os.path.join(defaultPath,defaultLogginFile),level=logging.DEBUG)
-			logging.warning('----------------------------')
-			logging.warning(datetime.now())
-			logging.warning('----------------------------')
-			logging.warning(getpass.getuser())
-			logging.warning('----------------------------')
-		count=count+1
+	global rate,debug,serverPort,serverIP,noNotify,defaultLogginFile
+	parser = argparse.ArgumentParser(add_help=True)
+	parser.add_argument('-r','--rate',type=int,nargs='?',help='Sets the rate in which the server is checked', default=rate)
+	parser.add_argument('-p','--port',type=int,nargs='?',help='Sets the port in which the server is checked',default=serverPort)
+	parser.add_argument('-i','--ip',type=str,nargs='?',help='Sets the ip in which the server is checked',default=serverIP)
+	parser.add_argument('-d', type =str,nargs='?',help='Debug file,if name provided in that file',default=False,const=defaultLogginFile)
+	parser.add_argument('--noicon', help='No notification is produced',action='store_true')
+	parser.add_argument('-e', help='Just for elementaryOS,makes icons work',action='store_true')
+	
+
+	args = parser.parse_args()
+	if args.d:
+		debug = True
+		defaultLogginFile= args.d
+		logging.basicConfig(filename=os.path.join(defaultPath,defaultLogginFile),level=logging.DEBUG)
+		logging.warning('----------------------------')
+		logging.warning(datetime.now())
+		logging.warning('----------------------------')
+		logging.warning(getpass.getuser())
+		logging.warning('----------------------------')
+	if args.rate:
+		rate = args.rate
+	if args.port:
+		serverPort = args.port
+	if args.ip:
+		serverIP = args.ip
+	if args.noicon:
+		noNotify = True
+	if args.e:
+		eOSNotification(iconsPath,eOS_iconPath,iconCon_img,iconDis_img)
+
 	try:
-		if(debug == True):
-			logging.warning(argv)
-			logging.warning('----------------------------')
 		global icon
 		icon = trayIcon(os.path.join(iconsPath,iconLoa_tray))
 		isAlive()
@@ -151,7 +151,8 @@ def main():
 		icon.stop()
 		sys.exit("Error, check log")  
 
-if __name__== "__main__":
+
+if __name__== '__main__':
   	main()
 
 
